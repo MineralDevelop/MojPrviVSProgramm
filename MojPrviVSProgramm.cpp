@@ -3,28 +3,67 @@
 
 #include <iostream>
 #include <fstream>
-#include <algorithm>
 #include <string>
+#include <algorithm>
+using namespace std;
 
 int main()
 {
-    using namespace std;
-    int n;
-    cin >> n;
-    string *polje = new string[n];
-    cin.ignore();
-    for (int i = 0; i < n; i++)
-    {
-        getline(cin, polje[i]);
-    }
-    sort(polje, polje+n);
     fstream datoteka;
-    datoteka.open("imenik.txt", ios::app);
-    for (int i = 0; i < n; i++)
+    int izbor = -1;
+    int tracker = 0;
+    string line;
+    int counter = 0;
+
+    datoteka.open("imenik.txt", ios::in);
+    while (getline(datoteka, line))
+        counter++;
+    datoteka.close();
+
+    string* imeprezime = new string[1000];
+
+    datoteka.open("imenik.txt", ios::in);
+    for (int i = 0; i < counter; i++)
     {
-        datoteka << polje[i] << endl;
+        getline(datoteka, imeprezime[i]);
     }
     datoteka.close();
+
+    while (izbor != 0)
+    {
+        cin >> izbor;
+        cin.ignore();
+        while (izbor>0)
+        {
+            getline(cin, imeprezime[counter]);
+            counter++;
+            izbor--;
+        }
+    }
+
+    sort(imeprezime, imeprezime + counter);
+
+    datoteka.open("imenik.txt", ios::out | ios::trunc);
+    datoteka.close();
+
+    datoteka.open("imenik.txt", ios::out);
+    for (int i = 0; i < counter; i++)
+    {
+        datoteka << imeprezime[i] << endl;
+    }
+    datoteka.close();
+
+    datoteka.open("imenik.txt", ios::in);
+    for (int i = 0; i < counter; i++)
+    {
+        getline(datoteka, imeprezime[i]);
+    }
+    datoteka.close();
+
+    for (int i = 0; i < counter; i++)
+    {
+        cout << imeprezime[i] << endl;
+    }
     return 0;
 }
 
